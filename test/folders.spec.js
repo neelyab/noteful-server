@@ -52,7 +52,7 @@ describe('Folders endpoints', () => {
       const folderId = 12345
       return supertest(app)
       .get(`/api/folders/${folderId}`)
-      .expect(400)
+      .expect(404)
       .then(res=>{
         expect(res.body.error.message).to.equal('Folder not found')
       })
@@ -111,7 +111,56 @@ describe('Folders endpoints', () => {
       return supertest(app)
       .post('/api/folders/')
       .send(faultyFolder)
-      .expect(400)
+      .expect(404)
+    })
+  })
+  context('DELETE requests', ()=>{
+    const testFolders = [
+      {
+        id: 1,
+        folder_name: 'super'
+      },
+      {
+        id: 2,
+        folder_name: 'spangley'
+      },
+      {
+        id: 3,
+        folder_name: 'important'
+      }
+    ];
+    const foldersAfterDelete = [
+      {
+        id: 1,
+        folder_name: 'super'
+      },
+      {
+        id: 3,
+        folder_name: 'important'
+      }
+    ]
+    beforeEach('insert test folders', () => {
+      return db.into('noteful_folders').insert(testFolders)
+     })
+    it('DELETE request successfully deletes a folder', ()=>{
+      const folderId = 2
+      return supertest(app)
+      .delete(`/api/folders/${folderId}`)
+      .expect(204)
+      .then(res=>{
+        return supertest(app)
+        .get('/api/folders')
+        .expect(200)
+        .then(res=>{
+          expect(res.body).to.eql(foldersAfterDelete)
+        })
+      })
+    })
+    it('DELETE request for folder that does not exist returns 404 ', ()=>{
+      const folderId = 12345
+      return supertest(app)
+      .delete(`/api/folder/${folderId}`)
+      .expect(404)
     })
   })
 })
