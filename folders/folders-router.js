@@ -2,6 +2,12 @@ const express = require('express')
 const FoldersService = require('./FoldersService')
 const foldersRouter = express.Router()
 const jsonParser = express.json()
+const xss = require('xss')
+
+const serializeFolder = (folder) => ({
+    id: folder.id,
+    folder_name: xss(folder.folder_name)
+})
 
 foldersRouter
 .route('/')
@@ -9,7 +15,7 @@ foldersRouter
     FoldersService.getFolders(req.app.get('db'))
     .then(folders =>{
         res.status(200)
-        .json(folders)
+        .json(folders.map(serializeFolder))
     })
     .catch(next)
 })
@@ -25,7 +31,7 @@ foldersRouter
     .then(folder=>{
         res.status(201)
         .location(`/api/folders/${folder.id}`)
-        .json(folder)
+        .json(serializeFolder(folder))
     })
     .catch(next)
 })
