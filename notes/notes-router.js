@@ -66,7 +66,7 @@ notesRouter
 .get((req, res)=>{
    return res.status(200).json(serializeNote(res.note))
 })
-.patch(jsonParser, (req, res, next) => {
+.patch(jsonParser, (req, res) => {
     const { folderId, content, note_name } = req.body
     updatedNote = {
         folderId,
@@ -74,13 +74,18 @@ notesRouter
         note_name
     }
     const note = Object.keys(updatedNote).filter(Boolean).length
-    if(note === 0){
+    if(!note){
         return res.status(400).json({error:{message: 'please enter updated information'}})
     }
     NotesService.updateNote(req.app.get('db'), req.params.id, updatedNote)
     .then(note=>{
         res.status(204).json(serializeNote(note))
     })
-    .catch(next)
+})
+.delete((req, res)=>{
+    NotesService.deleteNote(req.app.get('db'), req.params.id)
+    .then(note=>{
+        res.status(204).end()
+    })
 })
 module.exports = notesRouter

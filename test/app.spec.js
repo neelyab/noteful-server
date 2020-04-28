@@ -18,7 +18,7 @@ describe('Noteful endpoints', () => {
   before('make knex instance',() => {
       db = knex({
         client: 'pg',
-        connection: process.env.TEST_DB_URL,
+        connection: process.env.TEST_DATABASE_URL,
       })
       app.set('db', db)
    })
@@ -269,5 +269,40 @@ describe('Noteful endpoints', () => {
           .expect(204)
         })
       })
+  })
+  describe('DELETE NOTE endpoints',()=>{
+    const testFolders = makeFoldersArray()
+      const testNotes = makeNotesArray()
+      beforeEach('insert test notes', ()=> {
+        return db.into('noteful_folders').insert(testFolders)
+        .then(res => {
+          return db.into('noteful_notes').insert(testNotes)
+        })
+      })
+    context('given the note does not exist',()=>{
+      it('returns 404 status', ()=>{
+        const noteId= 12345
+      return supertest(app)
+      .delete(`/api/notes/${noteId}`)
+      .expect(404)
+      })
+    })
+    context('given the note does exist, expect 204 status', ()=>{
+      it('returns 204 status on successful deletion of note', ()=>{
+        const noteId = 2
+        const expectedArray = testNotes.filter(note=> note.id !== noteId)
+      return supertest(app)
+      .delete(`/api/notes/${noteId}`)
+      .expect(204)
+      .then(()=>{
+        return supertest(app)
+        .get('/api/notes')
+        .expect(200)
+        .then(res =>{
+          expect(res.body).to.have.lengthOf(2)
+        })
+      })
+      })
+    })
   })
 })
