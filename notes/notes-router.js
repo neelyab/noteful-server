@@ -8,7 +8,7 @@ const serializeNote = note => ({
     id: note.id,
     note_name: xss(note.note_name),
     modified: note.modified,
-    folderId: note.folderId,
+    folderid: note.folderid,
     content: xss(note.content)
 })
 
@@ -22,10 +22,10 @@ notesRouter
     })
 })
 .post(jsonParser, (req, res, next) =>{
-    const {note_name, folderId, content} = req.body
+    const {note_name, folderid, content} = req.body
     const note = {
         note_name,
-        folderId,
+        folderid,
         content
     }
     // const fields = ['note_name', 'folderId', 'content']
@@ -67,9 +67,9 @@ notesRouter
    return res.status(200).json(serializeNote(res.note))
 })
 .patch(jsonParser, (req, res) => {
-    const { folderId, content, note_name } = req.body
+    const { folderid, content, note_name } = req.body
     updatedNote = {
-        folderId,
+        folderid,
         content,
         note_name
     }

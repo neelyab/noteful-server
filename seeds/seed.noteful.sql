@@ -1,17 +1,18 @@
 INSERT INTO noteful_folders (folder_name)
-VALUES('Super'),
-        ('Spangley'),
+VALUES('Lists'),
+        ('To Dos'),
         ('Important');
 
 
 INSERT INTO noteful_notes(note_name, modified, folderId, content)
-VALUES ('Cat', now(), 2, 'This is a note all about cats'),
-        ('Dog', now(), 1, 'This is a note all about dogs'),
-        ('Hello', now(), 2, 'This is a note'),
+VALUES ('Dr. Appointment', now(), 3, 'Friday at 10am'),
+        ('Vet Appointment', now(), 3, 'Friday at 12pm'),
+        ('Mow Lawn', now(), 2, 'Mow the lawn'),
         ('Important Note', now(), 3, 'This is a note all about important things'),
-        ('Grocery List', now(), 3, 'What I need to buy at the grocery store'),
-        ('To Do', now(), 1, 'Clean the house, Do the Dishes, Do Laundry, Walk Dogs'),
-        ('School Work', now(), 1, 'Schedule for studying:'),
-        ('Birthday', now(), 2, 'Birthday present list');
+        ('Grocery List', now(), 1, 'What I need to buy at the grocery store'),
+        ('To Do', now(), 2, 'Clean the house, Do the Dishes, Do Laundry, Walk Dogs'),
+        ('School Work', now(), 2, 'Study for test, submit assignment by Friday at 4pm'),
+        ('Birthday Shopping List', now(), 1, 'Birthday present list: balloons, paper plates, confetti'),
+        ('Car', now(), 2, 'Renew registration, get inspection done');
         
         
